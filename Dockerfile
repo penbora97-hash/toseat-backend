@@ -14,20 +14,22 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy all files
+# ✅ Copy everything first
 COPY . .
 
-# ✅ Install dependencies (តែមួយដង)
-RUN composer install --no-interaction --no-scripts --no-dev --optimize-autoloader
+# ✅ Debug: Show files
+RUN ls -la
+RUN cat composer.json || echo "composer.json not found"
 
-# Generate key
+# ✅ Install with --no-scripts
+RUN composer install --no-interaction --no-dev --optimize-autoloader --no-scripts
+
+# ✅ Run scripts separately
 RUN php artisan key:generate
 
 # Set permissions
 RUN chmod -R 775 storage bootstrap/cache
 
-# Expose port
 EXPOSE 8000
 
-# Start server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
