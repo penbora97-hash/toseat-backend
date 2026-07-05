@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\OrderController as UserOrderController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -43,11 +44,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // ✅ Cart Routes - FIXED: clear and count BEFORE {productId}
+    // ✅ Cart Routes
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
-    Route::delete('/cart/clear', [CartController::class, 'clear']);      // ← ត្រូវមុន {productId}
-    Route::get('/cart/count', [CartController::class, 'count']);        // ← ត្រូវមុន {productId}
+    Route::delete('/cart/clear', [CartController::class, 'clear']);
+    Route::get('/cart/count', [CartController::class, 'count']);
     Route::put('/cart/{productId}', [CartController::class, 'update']);
     Route::delete('/cart/{productId}', [CartController::class, 'destroy']);
 
@@ -55,7 +56,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders', [UserOrderController::class, 'index']);
     Route::get('/orders/{id}', [UserOrderController::class, 'show']);
     Route::post('/orders', [UserOrderController::class, 'store']);
-    Route::put('/orders/{id}/cancel', [UserOrderController::class, 'cancel']);
+
+    // ✅ Cancel/Update Order - ប្រើ PATCH និង POST
+    Route::patch('/orders/{id}', [UserOrderController::class, 'update']);        // ← បន្ថែមសម្រាប់ cancel
+    Route::post('/orders/{id}/cancel', [UserOrderController::class, 'cancel']);  // ← Alternative
     Route::get('/orders/track/{id}', [UserOrderController::class, 'track']);
 });
 
@@ -94,6 +98,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     // ==================== ORDERS ====================
     Route::get('/orders', [AdminOrderController::class, 'index']);
     Route::get('/orders/{id}', [AdminOrderController::class, 'show']);
+
+    // ✅ Admin Order Status Management
     Route::put('/orders/{id}/status', [AdminOrderController::class, 'updateStatus']);
     Route::delete('/orders/{id}/cancel', [AdminOrderController::class, 'cancel']);
     Route::get('/orders/stats', [AdminOrderController::class, 'getOrderStats']);
@@ -101,4 +107,3 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     // ==================== DASHBOARD STATISTICS ====================
     Route::get('/stats', [AdminOrderController::class, 'stats']);
 });
-    

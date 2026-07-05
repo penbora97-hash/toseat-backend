@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->string('name_kh')->nullable();          
             $table->boolean('is_active')->default(true);
             $table->integer('order')->default(0);
             $table->timestamps();
