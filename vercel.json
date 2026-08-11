@@ -26,7 +26,9 @@
   ],
   "env": {
     "APP_ENV": "production",
-    "APP_DEBUG": "false",
+    "APP_DEBUG": "true",
+    "APP_URL"  : "https://tosEat.vercel.app",
+    "APP_KEY" : "base64:WfhtmMJoDA5KcDdCJPSZCovmA3H5O2P62oKxQR2NFpo=",
     "LOG_CHANNEL": "stderr"
   }
 }
