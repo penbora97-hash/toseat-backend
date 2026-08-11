@@ -37,10 +37,9 @@ class OrderItemsController extends Controller
                 'status' => 'success',
                 'data' => $items
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error fetching order items: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch order items: ' . $e->getMessage()
@@ -64,7 +63,6 @@ class OrderItemsController extends Controller
                 'status' => 'success',
                 'data' => $item
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -86,7 +84,7 @@ class OrderItemsController extends Controller
             ]);
 
             $order = Order::find($request->order_id);
-            
+
             // Check if order is pending
             if ($order->status !== 'pending') {
                 return response()->json([
@@ -96,7 +94,7 @@ class OrderItemsController extends Controller
             }
 
             $product = \App\Models\Product::find($request->product_id);
-            
+
             // Check stock
             if ($product->stock < $request->quantity) {
                 return response()->json([
@@ -129,10 +127,9 @@ class OrderItemsController extends Controller
                 'message' => 'Order item added successfully',
                 'data' => $item
             ], 201);
-
         } catch (\Exception $e) {
             Log::error('Error creating order item: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to create order item: ' . $e->getMessage()
@@ -147,7 +144,7 @@ class OrderItemsController extends Controller
     {
         try {
             $item = OrderItem::with('order')->findOrFail($id);
-            
+
             // Check if order is pending
             if ($item->order->status !== 'pending') {
                 return response()->json([
@@ -165,7 +162,7 @@ class OrderItemsController extends Controller
             $quantityDiff = $newQuantity - $oldQuantity;
 
             $product = \App\Models\Product::find($item->product_id);
-            
+
             // Check stock for additional quantity
             if ($quantityDiff > 0 && $product->stock < $quantityDiff) {
                 return response()->json([
@@ -198,10 +195,9 @@ class OrderItemsController extends Controller
                 'message' => 'Order item updated successfully',
                 'data' => $item
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error updating order item: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to update order item: ' . $e->getMessage()
@@ -216,7 +212,7 @@ class OrderItemsController extends Controller
     {
         try {
             $item = OrderItem::with('order')->findOrFail($id);
-            
+
             // Check if order is pending
             if ($item->order->status !== 'pending') {
                 return response()->json([
@@ -243,10 +239,9 @@ class OrderItemsController extends Controller
                 'status' => 'success',
                 'message' => 'Order item deleted successfully'
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error deleting order item: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to delete order item: ' . $e->getMessage()
@@ -261,7 +256,7 @@ class OrderItemsController extends Controller
     {
         try {
             $order = Order::where('order_number', $orderNumber)->firstOrFail();
-            
+
             $items = OrderItem::with('product')
                 ->where('order_id', $order->id)
                 ->get();
@@ -271,7 +266,6 @@ class OrderItemsController extends Controller
                 'order' => $order,
                 'data' => $items
             ]);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -308,10 +302,9 @@ class OrderItemsController extends Controller
                     'top_products' => $topProducts,
                 ]
             ]);
-
         } catch (\Exception $e) {
             Log::error('Error fetching order item stats: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch stats'
