@@ -8,15 +8,19 @@ class AddNameKhToCategoriesTable extends Migration
 {
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('name_kh')->nullable()->after('name');
-        });
+        if (!Schema::hasColumn('categories', 'name_kh')) {
+            Schema::table('categories', function (Blueprint $table) {
+                $table->string('name_kh')->nullable()->after('name');
+            });
+        }
     }
 
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('name_kh');
-        });
+        if (Schema::hasColumn('categories', 'name_kh')) {
+            Schema::table('categories', function (Blueprint $table) {
+                $table->dropColumn('name_kh');
+            });
+        }
     }
 }
