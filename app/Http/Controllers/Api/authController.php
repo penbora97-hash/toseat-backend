@@ -18,11 +18,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20',
-            'password' => 'required|string|min:6|confirmed',
-            'role' => 'sometimes|in:user,admin', // ✅ អនុញ្ញាតឲ្យបញ្ជូន role
+                'full_name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'phone' => 'required|string|max:20',
+                'password' => 'required|string|min:6|confirmed',
+                'role' => 'sometimes|in:user,admin', // ✅ អនុញ្ញាតឲ្យបញ្ជូន role
         ]);
 
         if ($validator->fails()) {
